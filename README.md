@@ -1,4 +1,4 @@
-# Empress Event Planner
+# EMPRESS Event Planner
 
 An AI event planner: enter an event and a member count, get back a materials
 list and a budget breakdown. Claude drafts the plan; a Java engine does the
