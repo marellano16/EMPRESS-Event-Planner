@@ -30,11 +30,30 @@ information from Empress records.
 
 ## Run the backend (Java)
 
-Not scaffolded yet. The plan calls for Javalin or Spring Boot, one endpoint
-(`POST /plan`), Jackson for JSON, and JUnit tests. Once the build tool is
-chosen, the run command goes here, for example `mvn exec:java` for Maven.
-The backend should read `ANTHROPIC_API_KEY` from the environment and listen
-on port 8080.
+Requires JDK 17+ and Maven. Built with Javalin, Jackson and JUnit 5.
+
+```
+cd backend
+mvn test                  # run the calculator tests
+mvn compile exec:java     # start the server on http://localhost:8080
+```
+
+Check it is up: open http://localhost:8080/health (should say `ok`).
+
+`POST /plan` currently returns a **stub** plan (hard-coded items, real
+calculator math) so the frontend has something to build against. Try it:
+
+```
+curl -X POST http://localhost:8080/plan -H "Content-Type: application/json" \
+  -d '{"eventType":"pizza night","memberCount":40,"budgetCap":200}'
+```
+
+On Windows PowerShell, use `curl.exe` and escape the quotes, or use the
+frontend instead.
+
+Next step: replace `App.buildStubPlan` with the Claude call. The Anthropic Java
+SDK dependency is not in `pom.xml` yet. The backend should read
+`ANTHROPIC_API_KEY` from the environment.
 
 ## Run the frontend (Python)
 
