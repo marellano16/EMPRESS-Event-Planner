@@ -1,0 +1,33 @@
+# Secrets: never commit API keys
+.env
+.env.*
+!.env.example
+*.key
+secrets.properties
+**/secrets.properties
+**/application-local.properties
+
+# Java / Maven / Gradle
+backend/target/
+backend/build/
+backend/.gradle/
+*.class
+*.jar
+!.mvn/wrapper/*.jar
+
+# Python / Streamlit
+__pycache__/
+*.pyc
+.venv/
+venv/
+frontend/.streamlit/secrets.toml
+
+# Local data
+*.sqlite
+*.db
+
+# IDEs / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
