@@ -81,6 +81,16 @@ public class GeminiGenerator implements PlanGenerator {
                 "Could not get a valid plan after 2 attempts: " + lastParseError.getMessage(), lastParseError);
     }
 
+    /** A short, safe hint for the most common failures. Never includes the key. */
+    static String httpHint(int status) {
+        return switch (status) {
+            case 400, 403 -> " (check GEMINI_API_KEY, and that GEMINI_MODEL is a current model name)";
+            case 404 -> " (model not found: set GEMINI_MODEL to a current model name from Google AI Studio)";
+            case 429 -> " (rate limit reached: wait a minute and try again)";
+            default -> "";
+        };
+    }
+
     static String userPrompt(PlanRequest r) {
         return String.format(Locale.US,
                 "Event type: %s%nMember count: %d%nBudget cap (USD): %.2f%nReturn the JSON plan.",
@@ -108,8 +118,7 @@ public class GeminiGenerator implements PlanGenerator {
             HttpResponse<String> response = http.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
                 throw new GenerationException("Gemini returned HTTP " + response.statusCode()
-                        + (response.statusCode() == 400 || response.statusCode() == 403
-                        ? " (check GEMINI_API_KEY and GEMINI_MODEL)" : ""));
+                        + httpHint(response.statusCode()));
             }
 
             JsonNode text = MAPPER.readTree(response.body()).at("/candidates/0/content/parts/0/text");
