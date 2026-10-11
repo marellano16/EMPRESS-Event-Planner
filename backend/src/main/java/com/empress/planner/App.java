@@ -25,8 +25,9 @@ public class App {
             System.out.println("No GEMINI_API_KEY set: using the stub plan generator.");
             return new StubGenerator();
         }
-        // Model names change over time; check Google AI Studio for a current one.
-        String model = System.getenv().getOrDefault("GEMINI_MODEL", "gemini-2.5-flash");
+        // Model names change over time; if Gemini answers HTTP 404, set GEMINI_MODEL
+        // to a current name from Google AI Studio.
+        String model = System.getenv().getOrDefault("GEMINI_MODEL", "gemini-3.8-flash");
         System.out.println("Using Gemini model: " + model);
         return new GeminiGenerator(key, model);
     }
